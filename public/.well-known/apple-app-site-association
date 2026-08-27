@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["3C8J33UXV7.com.jisung.sktaxi"],
+        "components": [
+          {"/": "/notice/*", "comment": "학교 공지 상세"},
+          {"/": "/cafeteria", "comment": "이번 주 학식"},
+          {"/": "/board/*", "comment": "커뮤니티 게시글 상세"}
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.jisung.sktaxi",
+      "sha256_cert_fingerprints": [
+        "A2:B4:B7:BF:B4:0B:65:DE:16:F0:16:B5:B6:40:72:A2:7E:E9:26:82:64:B3:B1:F9:DD:7F:27:EC:DE:47:2E:96"
+      ]
+    }
+  }
+]
