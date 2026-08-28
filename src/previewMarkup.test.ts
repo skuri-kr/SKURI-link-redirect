@@ -42,4 +42,36 @@ describe('renderPreviewMarkup', () => {
     expect(html).toContain('게시물 일부 내용');
     expect(html).toContain('커뮤니티 · 자유');
   });
+
+  it('공지 이미지 비율은 CSP가 허용하는 width와 height 속성으로 보존한다', () => {
+    const html = renderPreviewMarkup({
+      kind: 'notice',
+      code: '7Kp3mQxA',
+      title: '이미지 공지',
+      blocks: [{
+        type: 'IMAGE',
+        imageUrl: 'https://www.sungkyul.ac.kr/image.png',
+        alt: '공지 이미지',
+        aspectRatio: 2,
+        truncated: false,
+      }],
+      truncated: false,
+    });
+
+    expect(html).toContain('width="1000" height="500"');
+    expect(html).not.toContain('style=');
+  });
+
+  it('학식 날짜는 방문자 위치와 무관하게 서울 날짜로 표시한다', () => {
+    const html = renderPreviewMarkup({
+      kind: 'cafeteria',
+      weekId: '2026-W35',
+      weekStart: '2026-08-24',
+      weekEnd: '2026-08-30',
+      categories: [],
+      days: {'2026-08-24': {}},
+    });
+
+    expect(html).toContain('8. 24. (월)');
+  });
 });
