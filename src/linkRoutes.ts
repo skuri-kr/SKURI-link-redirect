@@ -1,5 +1,8 @@
 export const APP_STORE_URL = 'https://apps.apple.com/app/id6754636203';
 export const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.jisung.sktaxi';
+export const PUBLIC_LINK_ORIGIN = 'https://link.skuri.kr';
+export const HANDOFF_LINK_ORIGIN = 'https://open.skuri.kr';
+export const HANDOFF_LINK_HOST = 'open.skuri.kr';
 
 const SAFE_SEGMENT_PATTERN = /^[A-Za-z0-9_-]+$/;
 
@@ -37,6 +40,30 @@ export const parseLinkRoute = (pathname: string): LinkRoute => {
   return {kind: 'unsupported'};
 };
 
+const buildRoutePath = (route: LinkRoute): string | null => {
+  switch (route.kind) {
+    case 'notice':
+      return `/notice/${encodeURIComponent(route.id)}`;
+    case 'cafeteria':
+      return '/cafeteria';
+    case 'board':
+      return `/board/${encodeURIComponent(route.id)}`;
+    case 'unsupported':
+      return null;
+  }
+};
+
+const buildHttpsUrl = (origin: string, route: LinkRoute): string | null => {
+  const path = buildRoutePath(route);
+  return path ? `${origin}${path}` : null;
+};
+
+export const buildPublicLinkUrl = (route: LinkRoute): string | null =>
+  buildHttpsUrl(PUBLIC_LINK_ORIGIN, route);
+
+export const buildHandoffLinkUrl = (route: LinkRoute): string | null =>
+  buildHttpsUrl(HANDOFF_LINK_ORIGIN, route);
+
 export const buildCustomSchemeUrl = (route: LinkRoute): string | null => {
   const url = new URL('skuri://open');
 
@@ -58,3 +85,11 @@ export const buildCustomSchemeUrl = (route: LinkRoute): string | null => {
 
   return url.toString();
 };
+
+export const buildAppOpenUrl = (
+  route: LinkRoute,
+  currentHostname: string,
+): string | null =>
+  currentHostname === HANDOFF_LINK_HOST
+    ? buildCustomSchemeUrl(route)
+    : buildHandoffLinkUrl(route);
