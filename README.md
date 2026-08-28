@@ -42,7 +42,18 @@ npm run build
 
 ## 배포
 
-GitHub `main` 브랜치를 Cloudflare Pages와 연결합니다.
+현재 Cloudflare Pages 프로젝트는 Git 연동이 없는 Direct Upload 방식입니다. `main` 병합 후 다음 순서로 운영 배포합니다.
+
+```bash
+npm test
+npm run build
+npx wrangler pages deploy dist \
+  --project-name skuri-link-redirect \
+  --branch main \
+  --commit-hash "$(git rev-parse HEAD)"
+```
+
+Wrangler 인증은 로컬 환경 변수 또는 macOS Keychain에 저장된 Cloudflare API 토큰을 사용하며, 토큰 값을 저장소나 명령 이력에 직접 기록하지 않습니다.
 
 - 빌드 명령: `npm run build`
 - 출력 디렉터리: `dist`
