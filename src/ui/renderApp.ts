@@ -80,8 +80,9 @@ const renderActions = (
   return renderStoreActions();
 };
 
-const renderLoading = (): string => `
+export const renderLoading = (): string => `
   <article class="detail-preview preview-loading" aria-label="미리보기 불러오는 중">
+    <h1 id="page-title" class="visually-hidden">미리보기 불러오는 중</h1>
     <div class="skeleton skeleton-label"></div>
     <div class="skeleton skeleton-title"></div>
     <div class="skeleton skeleton-meta"></div>
@@ -90,6 +91,11 @@ const renderLoading = (): string => `
     <div class="skeleton skeleton-line short"></div>
     <div class="skeleton skeleton-media"></div>
   </article>`;
+
+export const isMissingShareLinkError = (error: unknown): boolean =>
+  error instanceof PreviewApiError
+  && error.status === 404
+  && error.errorCode === 'SHARE_LINK_NOT_FOUND';
 
 export const renderApp = async (
   root: HTMLDivElement,
@@ -160,7 +166,7 @@ export const renderApp = async (
     const preview = await fetchPreview(route);
     if (preview) previewSlot.innerHTML = renderPreviewMarkup(preview);
   } catch (error) {
-    const notFound = error instanceof PreviewApiError && error.status === 404;
+    const notFound = isMissingShareLinkError(error);
     previewSlot.innerHTML = `<div class="preview-error" role="status">
       <p class="detail-kicker">스쿠리 공유 링크</p>
       <h1 id="page-title">${notFound ? '공유 링크를 찾을 수 없어요' : '미리보기를 불러오지 못했어요'}</h1>

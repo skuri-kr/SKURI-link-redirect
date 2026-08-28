@@ -39,10 +39,10 @@ const renderNoticeBlock = (block: PreviewBlock): string => {
     case 'TEXT':
       return `<p class="notice-text">${escapeHtml(block.text)}</p>`;
     case 'IMAGE': {
-      const ratio = block.aspectRatio && block.aspectRatio > 0
-        ? ` style="aspect-ratio:${Math.min(Math.max(block.aspectRatio, 0.4), 3)}"`
+      const dimensions = block.aspectRatio && block.aspectRatio > 0
+        ? ` width="1000" height="${Math.round(1000 / Math.min(Math.max(block.aspectRatio, 0.4), 3))}"`
         : '';
-      return `<figure class="notice-image"${ratio}><img src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.alt ?? '')}" loading="lazy" referrerpolicy="no-referrer" /></figure>`;
+      return `<figure class="notice-image"><img src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.alt ?? '')}"${dimensions} loading="lazy" referrerpolicy="no-referrer" /></figure>`;
     }
     case 'TABLE':
       return `<div class="notice-table-scroll"><table class="notice-table"><tbody>${block.rows
@@ -87,7 +87,12 @@ const renderBoard = (preview: BoardPreview): string => `
 const weekdayLabel = (dateValue: string): string => {
   const date = new Date(`${dateValue}T12:00:00+09:00`);
   if (Number.isNaN(date.getTime())) return dateValue;
-  return new Intl.DateTimeFormat('ko-KR', {month: 'numeric', day: 'numeric', weekday: 'short'}).format(date);
+  return new Intl.DateTimeFormat('ko-KR', {
+    month: 'numeric',
+    day: 'numeric',
+    weekday: 'short',
+    timeZone: 'Asia/Seoul',
+  }).format(date);
 };
 
 const renderCafeteria = (preview: CafeteriaPreview): string => {
