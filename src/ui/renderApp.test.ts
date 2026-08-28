@@ -1,6 +1,10 @@
 import {describe, expect, it} from 'vitest';
 import {PreviewApiError} from '../previewApi';
-import {isMissingShareLinkError, renderLoading} from './renderApp';
+import {
+  isMissingCafeteriaMenuError,
+  isMissingShareLinkError,
+  renderLoading,
+} from './renderApp';
 
 describe('renderApp helpers', () => {
   it('API의 공유링크없음오류만 만료된 링크로 분류한다', () => {
@@ -12,6 +16,20 @@ describe('renderApp helpers', () => {
     )).toBe(false);
     expect(isMissingShareLinkError(
       new PreviewApiError('학식 없음', 404, 'CAFETERIA_MENU_NOT_FOUND'),
+    )).toBe(false);
+  });
+
+  it('학식 메뉴 없음 오류만 학식 미등록 상태로 분류한다', () => {
+    const error = new PreviewApiError('학식 없음', 404, 'CAFETERIA_MENU_NOT_FOUND');
+
+    expect(isMissingCafeteriaMenuError({kind: 'cafeteria'}, error)).toBe(true);
+    expect(isMissingCafeteriaMenuError(
+      {kind: 'cafeteria'},
+      new PreviewApiError('공유 링크 없음', 404, 'SHARE_LINK_NOT_FOUND'),
+    )).toBe(false);
+    expect(isMissingCafeteriaMenuError(
+      {kind: 'notice', code: '7Kp3mQxA'},
+      error,
     )).toBe(false);
   });
 

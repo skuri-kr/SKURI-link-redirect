@@ -97,6 +97,15 @@ export const isMissingShareLinkError = (error: unknown): boolean =>
   && error.status === 404
   && error.errorCode === 'SHARE_LINK_NOT_FOUND';
 
+export const isMissingCafeteriaMenuError = (
+  route: ReturnType<typeof parseLinkRoute>,
+  error: unknown,
+): boolean =>
+  route.kind === 'cafeteria'
+  && error instanceof PreviewApiError
+  && error.status === 404
+  && error.errorCode === 'CAFETERIA_MENU_NOT_FOUND';
+
 export const renderApp = async (
   root: HTMLDivElement,
   location: Pick<Location, 'hostname' | 'pathname'>,
@@ -167,10 +176,11 @@ export const renderApp = async (
     if (preview) previewSlot.innerHTML = renderPreviewMarkup(preview);
   } catch (error) {
     const notFound = isMissingShareLinkError(error);
+    const missingCafeteriaMenu = isMissingCafeteriaMenuError(route, error);
     previewSlot.innerHTML = `<div class="preview-error" role="status">
       <p class="detail-kicker">스쿠리 공유 링크</p>
-      <h1 id="page-title">${notFound ? '공유 링크를 찾을 수 없어요' : '미리보기를 불러오지 못했어요'}</h1>
-      <p>${notFound ? '링크가 만료된 것은 아니지만, 원본이 삭제되었거나 주소가 정확하지 않을 수 있어요.' : '잠시 후 다시 시도하거나 스쿠리 앱에서 확인해 주세요.'}</p>
+      <h1 id="page-title">${missingCafeteriaMenu ? '이번 주 학식이 없어요' : notFound ? '공유 링크를 찾을 수 없어요' : '미리보기를 불러오지 못했어요'}</h1>
+      <p>${missingCafeteriaMenu ? '이번 주 학식이 등록되면 여기에서 미리 확인할 수 있어요.' : notFound ? '링크가 만료된 것은 아니지만, 원본이 삭제되었거나 주소가 정확하지 않을 수 있어요.' : '잠시 후 다시 시도하거나 스쿠리 앱에서 확인해 주세요.'}</p>
     </div>`;
   }
 };
