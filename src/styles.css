@@ -120,13 +120,15 @@ a {
 }
 
 .link-card {
+  position: relative;
   width: min(100%, 480px);
-  padding: 44px 38px 36px;
+  overflow: hidden;
+  padding: 0;
   border: 1px solid rgba(229, 231, 235, 0.82);
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 24px 70px rgba(17, 24, 39, 0.09), 0 2px 8px rgba(17, 24, 39, 0.04);
-  text-align: center;
+  text-align: left;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   animation: card-enter 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -172,7 +174,7 @@ a {
 h1 {
   margin: 0;
   color: var(--text-primary);
-  font-size: clamp(27px, 6vw, 34px);
+  font-size: clamp(25px, 6vw, 32px);
   font-weight: 800;
   letter-spacing: -0.045em;
   line-height: 1.22;
@@ -189,7 +191,12 @@ h1 {
 }
 
 .actions {
-  margin-top: 34px;
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  padding: 8px 34px 34px;
+  background: rgba(255, 255, 255, 0.98);
+  text-align: center;
 }
 
 .primary-action {
@@ -268,6 +275,23 @@ h1 {
   font-size: 12px;
   font-weight: 650;
   line-height: 1.5;
+}
+
+.handoff-help {
+  margin: 12px 2px 0;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.secondary-link {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .store-guide {
@@ -351,6 +375,234 @@ footer strong {
   letter-spacing: 0.02em;
 }
 
+[data-preview-slot] {
+  max-height: 590px;
+  overflow: hidden;
+}
+
+.detail-preview {
+  min-height: 400px;
+  padding: 38px 34px 150px;
+}
+
+.detail-kicker {
+  margin: 0 0 10px;
+  color: var(--brand-strong);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.preview-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 0;
+  margin-top: 16px;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.preview-meta span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.preview-meta span:not(:last-child)::after {
+  width: 3px;
+  height: 3px;
+  margin: 0 8px;
+  border-radius: 50%;
+  background: #d1d5db;
+  content: "";
+}
+
+.detail-divider {
+  height: 1px;
+  margin: 24px 0;
+  background: var(--border);
+}
+
+.notice-blocks {
+  display: grid;
+  gap: 18px;
+}
+
+.notice-text,
+.board-content {
+  margin: 0;
+  color: #374151;
+  font-size: 15px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notice-image {
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--subtle);
+}
+
+.notice-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.notice-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.notice-table {
+  width: 100%;
+  min-width: 340px;
+  border-collapse: collapse;
+  color: #374151;
+  font-size: 12px;
+}
+
+.notice-table th,
+.notice-table td {
+  padding: 10px 9px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+  text-align: left;
+  vertical-align: top;
+}
+
+.notice-table th {
+  background: var(--brand-tint);
+  font-weight: 800;
+}
+
+.notice-table tr:last-child > * {
+  border-bottom: 0;
+}
+
+.notice-table tr > *:last-child {
+  border-right: 0;
+}
+
+.menu-days {
+  display: grid;
+  gap: 18px;
+}
+
+.menu-day h2 {
+  margin: 0 0 9px;
+  color: var(--text-primary);
+  font-size: 15px;
+  letter-spacing: -0.02em;
+}
+
+.menu-entry {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 10px;
+  padding: 11px 0;
+  border-top: 1px solid #f1f5f9;
+}
+
+.menu-entry strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.menu-entry small,
+.menu-category {
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+.menu-entry small {
+  display: inline-block;
+  margin: 4px 5px 0 0;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  color: var(--brand-strong);
+  background: var(--brand-tint);
+}
+
+.empty-menu {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.preview-fade {
+  position: relative;
+  z-index: 2;
+  height: 140px;
+  margin-top: -140px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.86) 55%, #fff 92%);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 42%, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 42%, black 100%);
+  pointer-events: none;
+}
+
+.preview-loading .skeleton {
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+.skeleton-label { width: 74px; height: 15px; }
+.skeleton-title { width: 84%; height: 35px; margin-top: 15px; }
+.skeleton-meta { width: 55%; height: 13px; margin-top: 18px; }
+.skeleton-line { width: 100%; height: 14px; margin-top: 11px; }
+.skeleton-line.short { width: 72%; }
+.skeleton-media { width: 100%; height: 150px; margin-top: 24px; border-radius: 14px; }
+
+@keyframes skeleton-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}
+
+.preview-error,
+.unsupported-copy {
+  min-height: 290px;
+  padding: 48px 34px 130px;
+}
+
+.preview-error p:last-child,
+.unsupported-copy p:last-child {
+  margin: 15px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.unsupported-card .preview-fade {
+  display: none;
+}
+
+.unsupported-card .actions {
+  padding-top: 0;
+}
+
 @media (max-width: 520px) {
   .page-shell {
     padding-right: 16px;
@@ -366,8 +618,23 @@ footer strong {
   }
 
   .link-card {
-    padding: 36px 22px 28px;
     border-radius: 24px;
+  }
+
+  .detail-preview {
+    padding: 32px 22px 145px;
+  }
+
+  .actions {
+    padding-right: 22px;
+    padding-bottom: 26px;
+    padding-left: 22px;
+  }
+
+  .preview-error,
+  .unsupported-copy {
+    padding-right: 22px;
+    padding-left: 22px;
   }
 }
 

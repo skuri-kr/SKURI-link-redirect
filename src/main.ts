@@ -7,4 +7,4 @@ if (!root) {
   throw new Error('앱 루트 요소를 찾을 수 없습니다.');
 }
 
-renderApp(root, window.location);
+void renderApp(root, window.location);
