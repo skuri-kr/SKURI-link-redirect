@@ -4,18 +4,18 @@ export const PUBLIC_LINK_ORIGIN = 'https://link.skuri.kr';
 export const HANDOFF_LINK_ORIGIN = 'https://open.skuri.kr';
 export const HANDOFF_LINK_HOST = 'open.skuri.kr';
 
-const SAFE_SEGMENT_PATTERN = /^[A-Za-z0-9_-]+$/;
+const SHARE_CODE_PATTERN = /^[1-9A-HJ-NP-Za-km-z]{8}$/;
 
 export type LinkRoute =
-  | {kind: 'notice'; id: string}
+  | {kind: 'notice'; code: string}
   | {kind: 'cafeteria'}
-  | {kind: 'board'; id: string}
+  | {kind: 'board'; code: string}
   | {kind: 'unsupported'};
 
 const decodeSegment = (segment: string): string | null => {
   try {
     const decoded = decodeURIComponent(segment);
-    return decoded.length > 0 && decoded.length <= 160 && SAFE_SEGMENT_PATTERN.test(decoded)
+    return SHARE_CODE_PATTERN.test(decoded)
       ? decoded
       : null;
   } catch {
@@ -31,9 +31,9 @@ export const parseLinkRoute = (pathname: string): LinkRoute => {
   }
 
   if (segments.length === 2 && (segments[0] === 'notice' || segments[0] === 'board')) {
-    const id = decodeSegment(segments[1]);
-    if (id) {
-      return {kind: segments[0], id};
+    const code = decodeSegment(segments[1]);
+    if (code) {
+      return {kind: segments[0], code};
     }
   }
 
@@ -43,11 +43,11 @@ export const parseLinkRoute = (pathname: string): LinkRoute => {
 const buildRoutePath = (route: LinkRoute): string | null => {
   switch (route.kind) {
     case 'notice':
-      return `/notice/${encodeURIComponent(route.id)}`;
+      return `/notice/${route.code}`;
     case 'cafeteria':
       return '/cafeteria';
     case 'board':
-      return `/board/${encodeURIComponent(route.id)}`;
+      return `/board/${route.code}`;
     case 'unsupported':
       return null;
   }
@@ -70,14 +70,14 @@ export const buildCustomSchemeUrl = (route: LinkRoute): string | null => {
   switch (route.kind) {
     case 'notice':
       url.searchParams.set('target', 'notice');
-      url.searchParams.set('id', route.id);
+      url.searchParams.set('id', route.code);
       break;
     case 'cafeteria':
       url.searchParams.set('target', 'cafeteria');
       break;
     case 'board':
       url.searchParams.set('target', 'board');
-      url.searchParams.set('id', route.id);
+      url.searchParams.set('id', route.code);
       break;
     case 'unsupported':
       return null;
@@ -93,3 +93,13 @@ export const buildAppOpenUrl = (
   currentHostname === HANDOFF_LINK_HOST
     ? buildCustomSchemeUrl(route)
     : buildHandoffLinkUrl(route);
+
+export const buildAndroidIntentUrl = (route: LinkRoute): string | null => {
+  const customSchemeUrl = buildCustomSchemeUrl(route);
+  if (!customSchemeUrl) {
+    return null;
+  }
+
+  const intentTarget = customSchemeUrl.replace(/^skuri:\/\//, 'intent://');
+  return `${intentTarget}#Intent;scheme=skuri;package=com.jisung.sktaxi;S.browser_fallback_url=${encodeURIComponent(PLAY_STORE_URL)};end`;
+};
